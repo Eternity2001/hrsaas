@@ -17,7 +17,7 @@
 
       <el-form-item prop="mobile">
         <span class="svg-container">
-          <svg-icon icon-class="user" />
+          <svg-icon icon-class="user"/>
         </span>
         <el-input
           ref="username"
@@ -32,7 +32,7 @@
 
       <el-form-item prop="password">
         <span class="svg-container">
-          <svg-icon icon-class="password" />
+          <svg-icon icon-class="password"/>
         </span>
         <el-input
           :key="passwordType"
@@ -69,6 +69,7 @@
 
 <script>
 import { validMobile } from '@/utils/validate'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Login',
@@ -112,6 +113,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['login']),
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -123,18 +125,18 @@ export default {
       })
     },
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
+      this.$refs.loginForm.validate(async isOk => {
+        if (isOk) {
+          try {
+            this.loading = true
+            await this['login'](this.loginForm)
+            this.$router.push('/')
+          } catch (e) {
+            console.log(e)
+          } finally {
+            // finally 表示不管成功与否都会执行finally中的代码
             this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
-        } else {
-          console.log('error submit!!')
-          return false
+          }
         }
       })
     }
