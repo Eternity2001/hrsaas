@@ -37,13 +37,13 @@ module.exports = {
       errors: true
     },
     // before: require('./mock/mock-server.js')
-    // 配置反向代理
+    // 代理配置
+    // 代理跨域的配置
     proxy: {
-      // 当地址中有'/api'时就会触发代理机制
+      // 当我们的本地的请求 有/api的时候，就会代理我们的请求地址向另外一个服务器发出请求
       '/api': {
         target: 'http://ihrm-java.itheima.net/', // 跨域请求的地址
-        changeOrigin: true, // 只有这个值为true的情况下 才表示开启跨域
-        logLevel: 'debug' //
+        changeOrigin: true // 只有这个值为true的情况下 才表示开启跨域
       }
     }
   },
